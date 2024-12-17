@@ -25,11 +25,11 @@ str(dtc.seurat.obj)
 
 # 29104 features across 10367 samples
 
-# 1. QC -------
+#  QC -------
 View(dtc.seurat.obj@meta.data)
 
 
-# % MT reads (percentage of mtochondrial genes found in each cell)
+# % MT reads (percentage of mtochondrial reads found in each cell)
 dtc.seurat.obj[["percent.mt"]] <- PercentageFeatureSet(dtc.seurat.obj, pattern = "^MT-")
 View(dtc.seurat.obj@meta.data)
 
@@ -39,19 +39,19 @@ FeatureScatter(dtc.seurat.obj, feature1 = "nCount_RNA", feature2 = "nFeature_RNA
   geom_smooth(method = 'lm')
 
 
-# 2. Filtering -----------------
+#  Filtering -----------------
 dtc.seurat.obj <- subset(dtc.seurat.obj, subset = nFeature_RNA > 500 & nFeature_RNA < 6000 & 
                              percent.mt < 10)
 str(dtc.seurat.obj)
 
-# 3. Normalize data ----------
+#  Normalize data ----------
 #dtc.seurat.obj <- NormalizeData(dtc.seurat.obj, normalization.method = "LogNormalize", scale.factor = 10000)
 # OR
 dtc.seurat.obj <- NormalizeData(dtc.seurat.obj)
 str(dtc.seurat.obj)
 
 
-#4.Identify higly variable feature---------
+# Identify higly variable feature---------
 dtc.seurat.obj <- FindVariableFeatures(dtc.seurat.obj,selection.method ="vst",nfeatures = 2000)
 
 
@@ -72,7 +72,7 @@ dtc.seurat.obj <- ScaleData(dtc.seurat.obj)
 str(dtc.seurat.obj)
 
 
-# 6. Perform Linear dimensionality reduction --------------
+#  Perform Linear dimensionality reduction --------------
 dtc.seurat.obj <- RunPCA(dtc.seurat.obj, features = VariableFeatures(object = dtc.seurat.obj))
 
 # visualize PCA results
@@ -82,7 +82,7 @@ DimHeatmap(dtc.seurat.obj, dims = 1, cells = 410, balanced = TRUE)
 # determine dimensionality of the data
 ElbowPlot(dtc.seurat.obj)
 
-# 7. Clustering ------------
+#  Clustering ------------
 #Identify the Nearest Neighbors: Use the selected number of PCs (e.g., 15) for constructing a k-nearest neighbors (kNN) graph:
 dtc.seurat.obj <- FindNeighbors(dtc.seurat.obj, dims = 1:10)
 
